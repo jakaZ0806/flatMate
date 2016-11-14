@@ -1,0 +1,19 @@
+<div style="margin-top: 10px">
+  <md-card>
+    <md-card-title>
+      Chat
+    </md-card-title>
+
+    <md-card-content>
+      <md-input [(ngModel)]="text" (keyup.enter)="sendMessage()"></md-input>
+      <button md-raised-button color="primary" (click)="sendMessage()">SEND</button>
+
+      <table>
+        <tr  *ngFor='let message of messages'>
+         <td>{{ message.timestamp }}</td> - <td>{{message.text}}</td>
+        </tr>
+      </table>
+
+    </md-card-content>
+  </md-card>
+</div>

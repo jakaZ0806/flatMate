@@ -1,0 +1,18 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+<md-toolbar>
+  <span>
+    <button md-icon-button [md-menu-trigger-for]="menu">
+   <md-icon>more_vert</md-icon>
+</button>
+  <md-menu #menu="mdMenu">
+    <button md-menu-item> Chat </button>
+    <button md-menu-item> Menu 2 </button>
+    <button md-menu-item> Menu 3 </button>
+    <button md-menu-item disabled> Sign Out </button>
+</md-menu>
+    <span>flatMate - playground</span>
+    </span>
+  <span class="fill-remaining-space"></span>
+  <span><md-card>User: log in / log out</md-card></span>
+</md-toolbar>

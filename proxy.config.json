@@ -1,0 +1,5 @@
+{
+  "/graphql": {
+    "target": "http://api.example.com"
+  }
+}
