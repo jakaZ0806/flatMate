@@ -1,19 +1,13 @@
-<div style="margin-top: 10px">
-  <md-card>
-    <md-card-title>
-      Chat
-    </md-card-title>
+  <h2>Add new</h2>
+  <input type="text" placeholder="First name" #firstName />
+  <input type="text" placeholder="Last name" [(ngModel)]="lastName" />
+  <input type="submit" value="Add user" (click)="newUser(firstName.value)" />
 
-    <md-card-content>
-      <md-input [(ngModel)]="text" (keyup.enter)="sendMessage()"></md-input>
-      <button md-raised-button color="primary" (click)="sendMessage()">SEND</button>
+  <h2>List</h2>
 
-      <table>
-        <tr  *ngFor='let message of messages'>
-         <td>{{ message.timestamp }}</td> - <td>{{message.text}}</td>
-        </tr>
-      </table>
-
-    </md-card-content>
-  </md-card>
-</div>
+  <input type="button" value="Refresh Users" (click)="getAllUsers()" />
+  <ul>
+    <li *ngFor="let user of users | async | select: 'users'">
+      {{ user.firstName }} {{user.lastName}}
+    </li>
+  </ul>
