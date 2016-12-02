@@ -1,5 +1,5 @@
 {
   "/graphql": {
-    "target": "http://api.example.com"
+    "target": "http://localhost:8080/graphql"
   }
 }

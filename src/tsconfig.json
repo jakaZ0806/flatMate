@@ -13,5 +13,8 @@
     "typeRoots": [
       "../node_modules/@types"
     ]
-  }
+  },
+  "include" : [
+    "../node_modules/typed-graphql/graphql.d.ts"
+  ]
 }
