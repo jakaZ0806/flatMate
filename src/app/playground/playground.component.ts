@@ -20,6 +20,7 @@ const queryAllUsers = gql`
       `;
 
 
+
 @Component({
   selector: 'app-playground',
   templateUrl: './playground.component.html',
@@ -35,6 +36,7 @@ export class PlaygroundComponent implements OnInit {
   public nameControl = new FormControl();
   public allUsers = [];
   loading: boolean;
+  subscriptionObserver;
 
   private apollo: Angular2Apollo;
 
@@ -45,7 +47,14 @@ export class PlaygroundComponent implements OnInit {
   ngOnInit() {
     this.users = this.apollo.watchQuery({
       query: queryAllUsers
-    })
+    });
+
+    const updateQueryFunction = gql`
+  subscription userAdded {userAdded {
+     id
+      }}`;
+
+    this.subscribe(updateQueryFunction);
   }
 
   public newUser(firstName: string) {
@@ -75,4 +84,17 @@ export class PlaygroundComponent implements OnInit {
         console.log('there was an error sending the query', errors);
       });
   }
+
+  private subscribe(updateQuery){
+    // call the "subscribe" method on Apollo Client
+    this.subscriptionObserver = this.apollo.subscribe({
+      query: updateQuery,
+    }).subscribe({
+      next(data) {
+        updateQuery();
+      },
+      error(err) { console.error('err', err); },
+    });
+  }
+
 }
