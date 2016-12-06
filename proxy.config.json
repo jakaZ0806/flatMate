@@ -1,5 +1,5 @@
 {
   "/graphql": {
-    "target": "http://localhost:8080/graphql"
+    "target": "http://localhost:3050/graphql"
   }
 }

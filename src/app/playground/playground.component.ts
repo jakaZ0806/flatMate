@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Angular2Apollo, ApolloQueryObservable } from 'angular2-apollo';
 import { ApolloQueryResult } from 'apollo-client';
 import { FormControl } from '@angular/forms';
+import {Subscription} from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 
 import gql from 'graphql-tag';
@@ -35,8 +36,16 @@ export class PlaygroundComponent implements OnInit {
   public lastName: string;
   public nameControl = new FormControl();
   public allUsers = [];
-  loading: boolean;
-  subscriptionObserver;
+  public user: any;
+  public loading: boolean;
+  private subscriptionObserver: Subscription;
+  private subscriptionQuery: any = gql`
+  subscription userAdded($firstName: String!){
+    userAdded(firstName: $firstName){
+      id
+      }
+  }`;
+  private entrySub: Subscription;
 
   private apollo: Angular2Apollo;
 
@@ -49,12 +58,12 @@ export class PlaygroundComponent implements OnInit {
       query: queryAllUsers
     });
 
-    const updateQueryFunction = gql`
-  subscription userAdded {userAdded {
-     id
-      }}`;
+    this.entrySub = this.users.subscribe(({data, loading}) => {
+      this.user = data.user;
+      this.loading = loading;
+    });
+    this.subscribe();
 
-    this.subscribe(updateQueryFunction);
   }
 
   public newUser(firstName: string) {
@@ -75,7 +84,6 @@ export class PlaygroundComponent implements OnInit {
     })
       .toPromise()
       .then(({ data }: ApolloQueryResult) => {
-        console.log('got data', data);
 
         // get new data
         this.users.refetch();
@@ -85,13 +93,15 @@ export class PlaygroundComponent implements OnInit {
       });
   }
 
-  private subscribe(updateQuery){
+  private subscribe(){
     // call the "subscribe" method on Apollo Client
     this.subscriptionObserver = this.apollo.subscribe({
-      query: updateQuery,
+      query: this.subscriptionQuery,
+      variables: {firstName: 'test'}
     }).subscribe({
-      next(data) {
-        updateQuery();
+      next: (data) => {
+        const newUser = data.userAdded;
+        console.log('Received Data from Subscription with ID: ' + newUser.id);
       },
       error(err) { console.error('err', err); },
     });
