@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Input, ChangeDetectorRef} from '@angular/core';
 import { Angular2Apollo, ApolloQueryObservable } from 'angular2-apollo';
 import { ApolloQueryResult } from 'apollo-client';
 import {Subscription} from 'rxjs/Subscription';
@@ -9,6 +9,7 @@ import gql from 'graphql-tag';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import {Observable} from "rxjs";
 
 const queryAllUsers = gql`
         query {
@@ -50,7 +51,7 @@ export class PlaygroundComponent implements OnInit {
 
   private apollo: Angular2Apollo;
 
-  constructor(apollo: Angular2Apollo) {
+  constructor(apollo: Angular2Apollo, private cd: ChangeDetectorRef) {
     this.apollo = apollo;
   }
 
@@ -58,6 +59,7 @@ export class PlaygroundComponent implements OnInit {
     this.users = this.apollo.watchQuery({
       query: queryAllUsers
     });
+
 
     this.subscribe();
     this.subscribeToTimer();
@@ -101,6 +103,7 @@ export class PlaygroundComponent implements OnInit {
         const newUser = data.userAdded;
         console.log('Received Data from Subscription with ID: ' + newUser.id);
         this.users.refetch();
+        this.cd.detectChanges();
       },
       error(err) { console.error('err', err); },
     });
@@ -116,6 +119,7 @@ export class PlaygroundComponent implements OnInit {
         const currentTimer = data.timeSub;
         console.log('Received Data from Subscription with Timecode: ' + currentTimer.time);
         this.currentTime = currentTimer.time;
+        this.cd.detectChanges();
       },
       error(err) { console.error('err', err); },
     });
