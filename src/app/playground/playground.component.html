@@ -1,11 +1,12 @@
-  <h2>Add new</h2>
+Timer: {{currentTime}}
+<input type="text" [(ngModel)]="currentTime" />
+<h2>Add new</h2>
   <input type="text" placeholder="First name" #firstName />
   <input type="text" placeholder="Last name" [(ngModel)]="lastName" />
   <input type="submit" value="Add user" (click)="newUser(firstName.value)" />
 
   <h2>List</h2>
 
-  <input type="button" value="Refresh Users" (click)="getAllUsers()" />
   <ul>
     <li *ngFor="let user of users | async | select: 'users'">
       {{ user.firstName }} {{user.lastName}}
