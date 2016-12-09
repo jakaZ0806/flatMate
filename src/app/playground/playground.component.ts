@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Angular2Apollo, ApolloQueryObservable } from 'angular2-apollo';
 import { ApolloQueryResult } from 'apollo-client';
-import { FormControl } from '@angular/forms';
 import {Subscription} from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
+
 
 import gql from 'graphql-tag';
 
@@ -34,10 +33,7 @@ export class PlaygroundComponent implements OnInit {
   public users: ApolloQueryObservable<any>;
   public firstName: string;
   public lastName: string;
-  public nameControl = new FormControl();
-  public allUsers = [];
-  public user: any;
-  public loading: boolean;
+  public currentTime: string;
   private subscriptionObserver: Subscription;
   private subscriptionQuery: any = gql`
   subscription userAdded($firstName: String!){
@@ -45,7 +41,12 @@ export class PlaygroundComponent implements OnInit {
       id
       }
   }`;
-  private entrySub: Subscription;
+  private timerQuery: any = gql`
+  subscription timeSub{
+    timeSub{
+      time
+      }
+  }`;
 
   private apollo: Angular2Apollo;
 
@@ -58,11 +59,8 @@ export class PlaygroundComponent implements OnInit {
       query: queryAllUsers
     });
 
-    this.entrySub = this.users.subscribe(({data, loading}) => {
-      this.user = data.user;
-      this.loading = loading;
-    });
     this.subscribe();
+    this.subscribeToTimer();
 
   }
 
@@ -102,9 +100,24 @@ export class PlaygroundComponent implements OnInit {
       next: (data) => {
         const newUser = data.userAdded;
         console.log('Received Data from Subscription with ID: ' + newUser.id);
+        this.users.refetch();
       },
       error(err) { console.error('err', err); },
     });
   }
 
+  private subscribeToTimer(){
+    // call the "subscribe" method on Apollo Client
+    this.subscriptionObserver = this.apollo.subscribe({
+      query: this.timerQuery,
+      variables: {}
+    }).subscribe({
+      next: (data) => {
+        const currentTimer = data.timeSub;
+        console.log('Received Data from Subscription with Timecode: ' + currentTimer.time);
+        this.currentTime = currentTimer.time;
+      },
+      error(err) { console.error('err', err); },
+    });
+  }
 }
