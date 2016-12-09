@@ -5,8 +5,10 @@
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import { Client } from 'subscriptions-transport-ws';
 import { addGraphQLSubscriptions } from "./subscriptions";
+import { environment } from '../../environments/environment';
 
-const wsClient = new Client('ws://localhost:8080');
+const wsClient = new Client('ws://' + environment.wsUrl + ':8080');
+
 
 const networkInterface = createNetworkInterface({
   uri: '/graphql/',
