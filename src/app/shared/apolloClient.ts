@@ -9,7 +9,7 @@ import { addGraphQLSubscriptions } from "./subscriptions";
 const wsClient = new Client('ws://localhost:8080');
 
 const networkInterface = createNetworkInterface({
-  uri: '/graphql',
+  uri: '/graphql/',
   opts: {
     credentials: 'same-origin',
   },

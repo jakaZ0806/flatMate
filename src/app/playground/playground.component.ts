@@ -37,8 +37,8 @@ export class PlaygroundComponent implements OnInit {
   public currentTime: string;
   private subscriptionObserver: Subscription;
   private subscriptionQuery: any = gql`
-  subscription userAdded($firstName: String!){
-    userAdded(firstName: $firstName){
+  subscription userAdded{
+    userAdded{
       id
       }
   }`;
@@ -97,7 +97,7 @@ export class PlaygroundComponent implements OnInit {
     // call the "subscribe" method on Apollo Client
     this.subscriptionObserver = this.apollo.subscribe({
       query: this.subscriptionQuery,
-      variables: {firstName: 'test'}
+      variables: {}
     }).subscribe({
       next: (data) => {
         const newUser = data.userAdded;
