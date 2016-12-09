@@ -7,7 +7,6 @@ Timer: {{currentTime}}
 
   <h2>List</h2>
 
-  <input type="button" value="Refresh Users" (click)="getAllUsers()" />
   <ul>
     <li *ngFor="let user of users | async | select: 'users'">
       {{ user.firstName }} {{user.lastName}}
