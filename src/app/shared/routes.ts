@@ -5,10 +5,14 @@ import { Routes, RouterModule } from '@angular/router/';
 
 import { PlaygroundComponent } from '../playground/playground.component';
 import { BudgetComponent } from '../budget/budget.component';
+import { LoginComponent } from "../login/login.component";
+import {AuthGuard} from "../auth-guard";
+
 
 export const routes: Routes = [
-  { path: 'playground', component: PlaygroundComponent },
+  { path: 'playground', component: PlaygroundComponent, canActivate: [AuthGuard] },
   { path: 'budget', component: BudgetComponent },
+  { path: 'login', component: LoginComponent },
   { path: '', redirectTo: '/playground', pathMatch: 'full'},
   {
     path: 'crisis-center',
@@ -29,7 +33,8 @@ export const routes: Routes = [
         ]
       }
     ]
-  }
+  },
+  {path: '**', redirectTo: ''  }
 ];
 
 export const routing = RouterModule.forRoot(routes);

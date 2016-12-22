@@ -101,7 +101,6 @@ export class PlaygroundComponent implements OnInit {
     }).subscribe({
       next: (data) => {
         const newUser = data.userAdded;
-        console.log('Received Data from Subscription with ID: ' + newUser.id);
         this.users.refetch();
         this.cd.detectChanges();
       },
@@ -117,7 +116,6 @@ export class PlaygroundComponent implements OnInit {
     }).subscribe({
       next: (data) => {
         const currentTimer = data.timeSub;
-        console.log('Received Data from Subscription with Timecode: ' + currentTimer.time);
         this.currentTime = currentTimer.time;
         this.cd.detectChanges();
       },
