@@ -12,7 +12,7 @@ import {AuthGuard} from "../auth-guard";
 export const routes: Routes = [
   { path: 'playground', component: PlaygroundComponent, canActivate: [AuthGuard] },
   { path: 'budget', component: BudgetComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent},
   { path: '', redirectTo: '/playground', pathMatch: 'full'},
   {
     path: 'crisis-center',

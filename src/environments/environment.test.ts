@@ -3,5 +3,6 @@
  */
 export const environment = {
   production: false,
-  wsUrl: '5.1.85.95'
+  wsUrl: '5.1.85.95',
+  httpUrl: '5.1.85.95',
 };
