@@ -11,16 +11,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import {Observable} from "rxjs";
 
-const queryAllUsers = gql`
-        query {
-          users {
-            firstName
-            lastName
-          }
-        }
-      `;
-
-
 
 @Component({
   selector: 'app-playground',
@@ -49,6 +39,15 @@ export class PlaygroundComponent implements OnInit {
       }
   }`;
 
+  private queryAllUsers: any = gql`
+        query {
+          users {
+            firstName
+            lastName
+          }
+        }
+      `;
+
   private apollo: Angular2Apollo;
 
   constructor(apollo: Angular2Apollo, private cd: ChangeDetectorRef) {
@@ -57,7 +56,7 @@ export class PlaygroundComponent implements OnInit {
 
   ngOnInit() {
     this.users = this.apollo.watchQuery({
-      query: queryAllUsers
+      query: this.queryAllUsers
     });
 
 

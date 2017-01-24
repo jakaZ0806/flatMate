@@ -22,11 +22,18 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions (
   wsClient
 );
 
+//Add JWT Support for Authorization: Add Auth Token to every graphQL-Request
+networkInterface.use([{
+  applyMiddleware(req, next) {
+    // get the authentication token from local storage if it exists
+    req.options.headers = {'x-access-token': JSON.parse(localStorage.getItem('currentUser')).token || null };
+    next();
+  }
+}]);
+
 const client = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions
 });
-
-
 
 export {
   client
