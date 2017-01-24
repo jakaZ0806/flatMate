@@ -24,6 +24,8 @@ export class PlaygroundComponent implements OnInit {
   public users: ApolloQueryObservable<any>;
   public firstName: string;
   public lastName: string;
+  public username: string;
+  public password: string;
   public currentTime: string;
   private subscriptionObserver: Subscription;
   private subscriptionQuery: any = gql`
@@ -69,16 +71,20 @@ export class PlaygroundComponent implements OnInit {
     // Call the mutation called addUser
     this.apollo.mutate({
       mutation: gql`
-        mutation M($firstName: String!, $lastName: String!) {
-          addUser(firstName: $firstName, lastName: $lastName) {
+        mutation M($firstName: String!, $lastName: String!, $username: String!, $password: String!) {
+          addUser(firstName: $firstName, lastName: $lastName, username: $username, password: $password) {
             firstName
             lastName
+            username
+            password
           } 	
         }
       `,
       variables: {
         firstName,
         lastName: this.lastName,
+        username: this.username,
+        password: this.password,
       },
     })
       .toPromise()

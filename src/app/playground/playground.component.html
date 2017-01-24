@@ -3,6 +3,8 @@ Timer: {{currentTime}}
 <h2>Add new</h2>
   <input type="text" placeholder="First name" #firstName />
   <input type="text" placeholder="Last name" [(ngModel)]="lastName" />
+  <input type="text" placeholder="username" [(ngModel)]="username" />
+  <input type="password" placeholder="password" [(ngModel)]="password" />
   <input type="submit" value="Add user" (click)="newUser(firstName.value)" />
 
   <h2>List</h2>
