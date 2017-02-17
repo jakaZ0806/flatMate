@@ -25,6 +25,7 @@
     "@types/isomorphic-fetch": "0.0.31",
     "@types/node": "^6.0.48",
     "angular2-apollo": "^0.8.0",
+    "angular2-jwt": "^0.1.28",
     "apollo-client": "^0.5.4",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",

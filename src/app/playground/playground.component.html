@@ -1,5 +1,5 @@
 Timer: {{currentTime}}
-<input type="text" [(ngModel)]="currentTime" />
+<button (click)="toggleTimer()">Toggle Timer!</button>
 <h2>Add new</h2>
   <input type="text" placeholder="First name" #firstName />
   <input type="text" placeholder="Last name" [(ngModel)]="lastName" />
@@ -11,6 +11,11 @@ Timer: {{currentTime}}
 
   <ul>
     <li *ngFor="let user of users | async | select: 'users'">
-      {{ user.firstName }} {{user.lastName}}
+      {{ user.firstName }} {{user.lastName}} ({{user.username}}) [admin = {{user.admin}}]
     </li>
   </ul>
+
+<button (click)="getCurrentUser()">Who am I?</button>
+
+<input type="text" placeholder="username" #usernamePWD/>
+<input type="submit" value="Get Password!" (click)="getPasswordForUser(usernamePWD.value)" />

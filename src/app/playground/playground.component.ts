@@ -46,7 +46,43 @@ export class PlaygroundComponent implements OnInit {
           users {
             firstName
             lastName
+            username
+            admin
           }
+        }
+      `;
+
+  private addUser: any = gql`
+        mutation addUser($firstName: String!, $lastName: String!, $username: String!, $password: String!) {
+          addUser(firstName: $firstName, lastName: $lastName, username: $username, password: $password) {
+            firstName
+            lastName
+            username
+            password
+          } 	
+        }
+      `;
+
+  private getUserByUsername: any = gql`
+        query getUser($username: String!) {
+          user(username: $username) {
+            id
+            username
+            firstName
+            lastName
+          } 	
+        }
+      `;
+
+  private getPassword: any = gql`
+        query getUser($username: String!) {
+          password(username: $username) 	
+        }
+      `;
+
+  private mut_toggleTimer: any = gql`
+        mutation toggleTimer {
+        toggleTimer
         }
       `;
 
@@ -70,16 +106,7 @@ export class PlaygroundComponent implements OnInit {
   public newUser(firstName: string) {
     // Call the mutation called addUser
     this.apollo.mutate({
-      mutation: gql`
-        mutation M($firstName: String!, $lastName: String!, $username: String!, $password: String!) {
-          addUser(firstName: $firstName, lastName: $lastName, username: $username, password: $password) {
-            firstName
-            lastName
-            username
-            password
-          } 	
-        }
-      `,
+      mutation: this.addUser,
       variables: {
         firstName,
         lastName: this.lastName,
@@ -89,6 +116,10 @@ export class PlaygroundComponent implements OnInit {
     })
       .toPromise()
       .then(({ data }: ApolloQueryResult) => {
+        console.log(data);
+        if (data.ApolloError) {
+          console.log(data.ApolloError.message);
+        }
 
         // get new data
         this.users.refetch();
@@ -127,4 +158,54 @@ export class PlaygroundComponent implements OnInit {
       error(err) { console.error('err', err); },
     });
   }
+
+  private getCurrentUser() {
+    this.apollo.query({
+      query: this.getUserByUsername,
+      variables: {
+        username: JSON.parse(localStorage.getItem('currentUser')).username
+      }
+    })
+      .toPromise()
+      .then(({data}: ApolloQueryResult) => {
+        const username = data.user.username;
+        const userid = data.user.id;
+        const firstName = data.user.firstName;
+        const lastName = data.user.lastName;
+
+        alert('You are ' + firstName + ' ' + lastName + ', your username is ' + username + ' and your user ID is ' + userid + '.')
+      })
+
+  };
+
+  private getPasswordForUser(username) {
+    if (username) {
+      this.apollo.query({
+        query: this.getPassword,
+        variables: {
+          username: username
+        }
+      })
+        .toPromise()
+        .then(({data}: ApolloQueryResult) => {
+          console.log(data);
+          alert(JSON.stringify(data));
+        })
+    }
+    else {
+      alert ('Enter a username!')
+    }
+  };
+
+  private toggleTimer() {
+    this.apollo.mutate({
+      mutation: this.mut_toggleTimer,
+
+    })
+      .toPromise()
+      .then(({data}: ApolloQueryResult) => {
+        alert('Timer active: ' + JSON.stringify(data.toggleTimer));
+      })
+
+  };
 }
