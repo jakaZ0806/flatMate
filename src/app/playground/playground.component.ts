@@ -21,27 +21,27 @@ import {Observable} from "rxjs";
 
 export class PlaygroundComponent implements OnInit {
 
-  public users: ApolloQueryObservable<any>;
-  public firstName: string;
-  public lastName: string;
-  public username: string;
-  public password: string;
-  public currentTime: string;
-  private subscriptionObserver: Subscription;
-  private subscriptionQuery: any = gql`
+  public users:ApolloQueryObservable<any>;
+  public firstName:string;
+  public lastName:string;
+  public username:string;
+  public password:string;
+  public currentTime:string;
+  private subscriptionObserver:Subscription;
+  private subscriptionQuery:any = gql`
   subscription userAdded{
     userAdded{
       id
       }
   }`;
-  private timerQuery: any = gql`
+  private timerQuery:any = gql`
   subscription timeSub{
     timeSub{
       time
       }
   }`;
 
-  private queryAllUsers: any = gql`
+  private queryAllUsers:any = gql`
         query {
           users {
             firstName
@@ -52,7 +52,7 @@ export class PlaygroundComponent implements OnInit {
         }
       `;
 
-  private addUser: any = gql`
+  private addUser:any = gql`
         mutation addUser($firstName: String!, $lastName: String!, $username: String!, $password: String!) {
           addUser(firstName: $firstName, lastName: $lastName, username: $username, password: $password) {
             firstName
@@ -63,7 +63,7 @@ export class PlaygroundComponent implements OnInit {
         }
       `;
 
-  private getUserByUsername: any = gql`
+  private getUserByUsername:any = gql`
         query getUser($username: String!) {
           user(username: $username) {
             id
@@ -74,21 +74,21 @@ export class PlaygroundComponent implements OnInit {
         }
       `;
 
-  private getPassword: any = gql`
+  private getPassword:any = gql`
         query getUser($username: String!) {
           password(username: $username) 	
         }
       `;
 
-  private mut_toggleTimer: any = gql`
+  private mut_toggleTimer:any = gql`
         mutation toggleTimer {
         toggleTimer
         }
       `;
 
-  private apollo: Angular2Apollo;
+  private apollo:Angular2Apollo;
 
-  constructor(apollo: Angular2Apollo, private cd: ChangeDetectorRef) {
+  constructor(apollo:Angular2Apollo, private cd:ChangeDetectorRef) {
     this.apollo = apollo;
   }
 
@@ -103,7 +103,7 @@ export class PlaygroundComponent implements OnInit {
 
   }
 
-  public newUser(firstName: string) {
+  public newUser(firstName:string) {
     // Call the mutation called addUser
     this.apollo.mutate({
       mutation: this.addUser,
@@ -115,7 +115,7 @@ export class PlaygroundComponent implements OnInit {
       },
     })
       .toPromise()
-      .then(({ data }: ApolloQueryResult) => {
+      .then(({data}: ApolloQueryResult) => {
         console.log(data);
         if (data.ApolloError) {
           console.log(data.ApolloError.message);
@@ -124,12 +124,12 @@ export class PlaygroundComponent implements OnInit {
         // get new data
         this.users.refetch();
       })
-      .catch((errors: any) => {
+      .catch((errors:any) => {
         console.log('there was an error sending the query', errors);
       });
   }
 
-  private subscribe(){
+  private subscribe() {
     // call the "subscribe" method on Apollo Client
     this.subscriptionObserver = this.apollo.subscribe({
       query: this.subscriptionQuery,
@@ -140,11 +140,13 @@ export class PlaygroundComponent implements OnInit {
         this.users.refetch();
         this.cd.detectChanges();
       },
-      error(err) { console.error('err', err); },
+      error(err) {
+        console.error('err', err);
+      },
     });
   }
 
-  private subscribeToTimer(){
+  private subscribeToTimer() {
     // call the "subscribe" method on Apollo Client
     this.subscriptionObserver = this.apollo.subscribe({
       query: this.timerQuery,
@@ -155,7 +157,9 @@ export class PlaygroundComponent implements OnInit {
         this.currentTime = currentTimer.time;
         this.cd.detectChanges();
       },
-      error(err) { console.error('err', err); },
+      error(err) {
+        console.error('err', err);
+      },
     });
   }
 
@@ -193,7 +197,7 @@ export class PlaygroundComponent implements OnInit {
         })
     }
     else {
-      alert ('Enter a username!')
+      alert('Enter a username!')
     }
   };
 

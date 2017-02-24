@@ -7,7 +7,6 @@ import { Client } from 'subscriptions-transport-ws';
 import { addGraphQLSubscriptions } from "./subscriptions";
 import { environment } from '../../environments/environment';
 import { JwtHelper } from 'angular2-jwt';
-import {AuthGuard} from "../auth-guard";
 
 const jwtHelper: JwtHelper = new JwtHelper();
 
@@ -34,28 +33,22 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions (
 );
 
 //Add JWT Support for Authorization: Add Auth Token to every graphQL-Request
-
-
 networkInterface.use([{
   applyMiddleware(req, next) {
-    var token = JSON.parse(localStorage.getItem('currentUser')).token;
-    if(jwtHelper.isTokenExpired(token)) {    };
-    // get the authentication token from local storage if it exists
-    req.options.headers = {'Authorization': 'Bearer ' + token || null };
+    //If no current User is stored in localStorage, it is not possible to add a token to the request
+    if (localStorage.getItem('currentUser')) {
+      var token = JSON.parse(localStorage.getItem('currentUser')).token;
+      //Helper Function for expired Tokens
+      if (jwtHelper.isTokenExpired(token)) {
+        token = null;
+      }
+      // get the authentication token from local storage if it exists
+      req.options.headers = {'Authorization': 'Bearer ' + token || null};
+    }
     next();
   }
 }]);
 
-/*
-networkInterface.useAfter([{
-  applyAfterware({response}, next) {
-    const resJSON = response.json();
-    const {data, errors} = resJSON;
-    console.log( {data, error: getClientError(errors)});
-    next();
-  }
-}]);
-*/
 
 const client = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions
