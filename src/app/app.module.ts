@@ -8,17 +8,23 @@ import { ApolloModule } from "angular2-apollo/build/src/index";
 import { routing } from './shared/routes';
 import { client } from './shared/apolloClient'
 
+import { AuthGuard } from './auth-guard';
+import { AuthenticationService} from './shared/services/authentication.service';
+import { UserService} from './shared/services/user.service';
+
 import { AppComponent } from './app.component';
 import { BudgetComponent } from './budget/budget.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { PlaygroundComponent } from './playground/playground.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BudgetComponent,
     NavbarComponent,
-    PlaygroundComponent
+    PlaygroundComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +35,11 @@ import { PlaygroundComponent } from './playground/playground.component';
     routing,
     ApolloModule.withClient(client)
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    AuthenticationService,
+    UserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
