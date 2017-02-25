@@ -1,6 +1,7 @@
 {
   "name": "flatMate",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "author": "Lukas Kugler",
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
