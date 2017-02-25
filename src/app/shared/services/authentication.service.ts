@@ -3,7 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { environment } from '../../../environments/environment';
-import { Angular2Apollo, ApolloQueryObservable } from 'angular2-apollo';
+import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 import 'rxjs/add/operator/toPromise';
@@ -11,9 +11,9 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class AuthenticationService {
   public token: string;
-  private apollo: Angular2Apollo;
+  private apollo: Apollo;
 
-  constructor(apollo: Angular2Apollo, private http : Http) {
+  constructor(apollo: Apollo, private http : Http) {
     // set token if saved in local storage
     var currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = currentUser && currentUser.token;
@@ -42,11 +42,11 @@ export class AuthenticationService {
       }
     })
       .toPromise()
-      .then(result => {
-        console.log(result);
-        if (result.data.getJWT.success) {
+      .then(({data}: ApolloQueryResult<any>) => {
+        console.log(data);
+        if (data.getJWT.success) {
           //Store Token in local Storage
-          localStorage.setItem('currentUser', JSON.stringify({ username: username, token: result.data.getJWT.token }));
+          localStorage.setItem('currentUser', JSON.stringify({ username: username, token: data.getJWT.token }));
           return true;
         }
         else {

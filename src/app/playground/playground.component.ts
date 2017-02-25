@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, ChangeDetectorRef} from '@angular/core';
-import { Angular2Apollo, ApolloQueryObservable } from 'angular2-apollo';
+import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import {Subscription} from 'rxjs/Subscription';
 
@@ -86,9 +86,9 @@ export class PlaygroundComponent implements OnInit {
         }
       `;
 
-  private apollo:Angular2Apollo;
+  private apollo:Apollo;
 
-  constructor(apollo:Angular2Apollo, private cd:ChangeDetectorRef) {
+  constructor(apollo:Apollo, private cd:ChangeDetectorRef) {
     this.apollo = apollo;
   }
 
@@ -115,7 +115,7 @@ export class PlaygroundComponent implements OnInit {
       },
     })
       .toPromise()
-      .then(({data}: ApolloQueryResult) => {
+      .then(({data}: ApolloQueryResult<any>) => {
         console.log(data);
         if (data.ApolloError) {
           console.log(data.ApolloError.message);
@@ -163,6 +163,7 @@ export class PlaygroundComponent implements OnInit {
     });
   }
 
+
   private getCurrentUser() {
     this.apollo.query({
       query: this.getUserByUsername,
@@ -171,7 +172,7 @@ export class PlaygroundComponent implements OnInit {
       }
     })
       .toPromise()
-      .then(({data}: ApolloQueryResult) => {
+      .then(({data}: ApolloQueryResult<any>) => {
         const username = data.user.username;
         const userid = data.user.id;
         const firstName = data.user.firstName;
@@ -191,7 +192,7 @@ export class PlaygroundComponent implements OnInit {
         }
       })
         .toPromise()
-        .then(({data}: ApolloQueryResult) => {
+        .then(({data}: ApolloQueryResult<any>) => {
           console.log(data);
           alert(JSON.stringify(data));
         })
@@ -207,7 +208,7 @@ export class PlaygroundComponent implements OnInit {
 
     })
       .toPromise()
-      .then(({data}: ApolloQueryResult) => {
+      .then(({data}: ApolloQueryResult<any>) => {
         alert('Timer active: ' + JSON.stringify(data.toggleTimer));
       })
 

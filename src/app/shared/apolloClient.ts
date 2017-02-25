@@ -3,21 +3,16 @@
  */
 
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
-import { Client } from 'subscriptions-transport-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { addGraphQLSubscriptions } from "./subscriptions";
 import { environment } from '../../environments/environment';
 import { JwtHelper } from 'angular2-jwt';
 
 const jwtHelper: JwtHelper = new JwtHelper();
 
-const getClientError = errors => {
-  if (!errors) return;
-  const error = errors[0].message;
-  return (error.indexOf('{"_error"') === -1) ? {_error: 'Server query error'} : JSON.parse(error);
-};
-
-
-const wsClient = new Client('ws://' + environment.wsUrl + ':8080');
+const wsClient = new SubscriptionClient('ws://' + environment.wsUrl + ':8080', {
+  reconnect: true
+});
 
 
 const networkInterface = createNetworkInterface({
@@ -50,10 +45,8 @@ networkInterface.use([{
 }]);
 
 
-const client = new ApolloClient({
-  networkInterface: networkInterfaceWithSubscriptions
-});
+const client = new ApolloClient({networkInterface: networkInterfaceWithSubscriptions });
 
-export {
-  client
-}
+export function getClient(): ApolloClient {
+  return client;
+  }
