@@ -1,10 +1,10 @@
-import { FlatMatePage } from './app.po';
+import { TestNewDepsPage } from './app.po';
 
-describe('flat-mate App', function() {
-  let page: FlatMatePage;
+describe('test-new-deps App', () => {
+  let page: TestNewDepsPage;
 
   beforeEach(() => {
-    page = new FlatMatePage();
+    page = new TestNewDepsPage();
   });
 
   it('should display message saying app works', () => {

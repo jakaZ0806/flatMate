@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material'
-import { ApolloModule } from "angular2-apollo/build/src/index";
+import { ApolloModule } from 'apollo-angular';
 
 import { routing } from './shared/routes';
-import { client } from './shared/apolloClient'
+import { getClient } from './shared/apolloClient'
 
 import { AuthGuard } from './auth-guard';
 import { AuthenticationService} from './shared/services/authentication.service';
@@ -17,6 +17,7 @@ import { BudgetComponent } from './budget/budget.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { PlaygroundComponent } from './playground/playground.component';
 import { LoginComponent } from './login/login.component';
+
 
 @NgModule({
   declarations: [
@@ -31,14 +32,14 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    MaterialModule.forRoot(),
+    MaterialModule,
     routing,
-    ApolloModule.withClient(client)
+    ApolloModule.forRoot(getClient)
   ],
   providers: [
     AuthGuard,
     AuthenticationService,
-    UserService
+    UserService,
   ],
   bootstrap: [AppComponent]
 })

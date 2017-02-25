@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class FlatMatePage {
+export class TestNewDepsPage {
   navigateTo() {
     return browser.get('/');
   }
