@@ -1,9 +1,6 @@
 import { Injectable} from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
-import { environment } from '../../../environments/environment';
-import { Apollo, ApolloQueryObservable } from 'apollo-angular';
+import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 import 'rxjs/add/operator/toPromise';
@@ -60,6 +57,15 @@ export class AuthenticationService {
     // clear token remove user from local storage to log user out
     this.token = null;
     localStorage.removeItem('currentUser');
+  }
+
+  getCurrentUser(): string {
+    if (localStorage.getItem('currentUser')) {
+      return JSON.parse(localStorage.getItem('currentUser')).username;
+    }
+    else {
+      return 'Gast';
+    }
   }
 
 }

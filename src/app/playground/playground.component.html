@@ -11,7 +11,7 @@ Timer: {{currentTime}}
 
   <ul>
     <li *ngFor="let user of users | async | select: 'users'">
-      {{ user.firstName }} {{user.lastName}} ({{user.username}}) [admin = {{user.admin}}]
+      {{ user.firstName }} {{user.lastName}} ({{user.username}}) [admin = {{user.admin}}] <button (click)="deleteUser(user.username)">Delete</button>
     </li>
   </ul>
 

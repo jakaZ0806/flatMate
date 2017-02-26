@@ -9,7 +9,7 @@ import gql from 'graphql-tag';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import {Observable} from "rxjs";
+
 
 
 @Component({
@@ -29,8 +29,8 @@ export class PlaygroundComponent implements OnInit {
   public currentTime:string;
   private subscriptionObserver:Subscription;
   private subscriptionQuery:any = gql`
-  subscription userAdded{
-    userAdded{
+  subscription userChanged{
+    userChanged{
       id
       }
   }`;
@@ -64,7 +64,7 @@ export class PlaygroundComponent implements OnInit {
       `;
 
   private getUserByUsername:any = gql`
-        query getUser($username: String!) {
+        query getUser($username: String) {
           user(username: $username) {
             id
             username
@@ -83,6 +83,14 @@ export class PlaygroundComponent implements OnInit {
   private mut_toggleTimer:any = gql`
         mutation toggleTimer {
         toggleTimer
+        }
+      `;
+
+  private mut_deleteUser:any = gql`
+         mutation deleteUser($username: String!) {
+          deleteUser(username: $username) {
+          username
+          } 	
         }
       `;
 
@@ -136,7 +144,7 @@ export class PlaygroundComponent implements OnInit {
       variables: {}
     }).subscribe({
       next: (data) => {
-        const newUser = data.userAdded;
+        const newUser = data.userChanged;
         this.users.refetch();
         this.cd.detectChanges();
       },
@@ -213,4 +221,19 @@ export class PlaygroundComponent implements OnInit {
       })
 
   };
+
+  private deleteUser(username) {
+    this.apollo.mutate({
+      mutation: this.mut_deleteUser,
+      variables: {username : username}
+
+    })
+      .toPromise()
+      .then(({data}: ApolloQueryResult<any>) => {
+        console.log(data);
+        this.users.refetch();
+      })
+
+  };
+
 }
