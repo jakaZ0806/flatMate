@@ -3,8 +3,7 @@
  */
 
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { addGraphQLSubscriptions } from "./subscriptions";
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 import { environment } from '../../environments/environment';
 import { JwtHelper } from 'angular2-jwt';
 

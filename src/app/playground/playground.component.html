@@ -11,11 +11,14 @@ Timer: {{currentTime}}
 
   <ul>
     <li *ngFor="let user of users | async | select: 'users'">
-      {{ user.firstName }} {{user.lastName}} ({{user.username}}) [admin = {{user.admin}}]
+      {{ user.firstName }} {{user.lastName}} ({{user.username}}) [admin = {{user.admin}}]  <button (click)="addAsFriend(user.username)">Add as Friend</button><button (click)="viewStatusMessage(user.username)">View Status</button> <button (click)="deleteUser(user.username)">Delete (only admin)</button>
     </li>
   </ul>
 
-<button (click)="getCurrentUser()">Who am I?</button>
+<button (click)="getCurrentUser()">Who am I?</button> <br>
 
 <input type="text" placeholder="username" #usernamePWD/>
-<input type="submit" value="Get Password!" (click)="getPasswordForUser(usernamePWD.value)" />
+<input type="submit" value="Get Password!" (click)="getPasswordForUser(usernamePWD.value)" /> (Only admin and self) <br>
+
+<input type="text" placeholder="username" #usernameStatus/> <input type="text" placeholder="username" #statusMessage/>
+<input type="submit" value="Change Status Message for User" (click)="changeStatusMessage(usernameStatus.value, statusMessage.value)" /> (only self)

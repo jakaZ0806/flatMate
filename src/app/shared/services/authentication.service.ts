@@ -1,9 +1,5 @@
 import { Injectable} from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
-import { environment } from '../../../environments/environment';
-import { Apollo, ApolloQueryObservable } from 'apollo-angular';
+import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 import 'rxjs/add/operator/toPromise';
@@ -13,7 +9,7 @@ export class AuthenticationService {
   public token: string;
   private apollo: Apollo;
 
-  constructor(apollo: Apollo, private http : Http) {
+  constructor(apollo: Apollo) {
     // set token if saved in local storage
     var currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = currentUser && currentUser.token;
@@ -43,7 +39,6 @@ export class AuthenticationService {
     })
       .toPromise()
       .then(({data}: ApolloQueryResult<any>) => {
-        console.log(data);
         if (data.getJWT.success) {
           //Store Token in local Storage
           localStorage.setItem('currentUser', JSON.stringify({ username: username, token: data.getJWT.token }));
@@ -60,6 +55,15 @@ export class AuthenticationService {
     // clear token remove user from local storage to log user out
     this.token = null;
     localStorage.removeItem('currentUser');
+  }
+
+  getCurrentUser(): string {
+    if (localStorage.getItem('currentUser')) {
+      return JSON.parse(localStorage.getItem('currentUser')).username;
+    }
+    else {
+      return 'Gast';
+    }
   }
 
 }
