@@ -53,8 +53,8 @@ export class PlaygroundComponent implements OnInit {
       `;
 
   private addUser:any = gql`
-        mutation addUser($firstName: String!, $lastName: String!, $username: String!, $password: String!) {
-          addUser(firstName: $firstName, lastName: $lastName, username: $username, password: $password) {
+        mutation addUser($firstName: String!, $lastName: String!, $username: String!, $password: String!, $admin: Boolean!) {
+          addUser(firstName: $firstName, lastName: $lastName, username: $username, password: $password, admin: $admin) {
             firstName
             lastName
             username
@@ -69,7 +69,12 @@ export class PlaygroundComponent implements OnInit {
             id
             username
             firstName
-            lastName
+            lastName,
+            friends {
+              firstName
+              lastName
+            }
+            statusMessage
           } 	
         }
       `;
@@ -90,6 +95,30 @@ export class PlaygroundComponent implements OnInit {
          mutation deleteUser($username: String!) {
           deleteUser(username: $username) {
           username
+          } 	
+        }
+      `;
+
+  private mut_changeStatusMessage:any = gql`
+         mutation changeStatusMessage($username: String!, $message: String!) {
+          changeStatusMessage(username: $username, message: $message) 
+        }
+      `;
+
+  private mut_addAsFriend:any = gql`
+         mutation addAsFriend($username: String!) {
+          addAsFriend(username: $username) {
+          username
+          firstName
+          lastName
+          }
+        }
+      `;
+
+  private query_viewStatusMessage:any = gql`
+        query getUser($username: String) {
+          user(username: $username) {
+            statusMessage
           } 	
         }
       `;
@@ -120,11 +149,11 @@ export class PlaygroundComponent implements OnInit {
         lastName: this.lastName,
         username: this.username,
         password: this.password,
+        admin: false
       },
     })
       .toPromise()
       .then(({data}: ApolloQueryResult<any>) => {
-        console.log(data);
         if (data.ApolloError) {
           console.log(data.ApolloError.message);
         }
@@ -177,7 +206,8 @@ export class PlaygroundComponent implements OnInit {
       query: this.getUserByUsername,
       variables: {
         username: JSON.parse(localStorage.getItem('currentUser')).username
-      }
+      },
+      forceFetch: true
     })
       .toPromise()
       .then(({data}: ApolloQueryResult<any>) => {
@@ -185,8 +215,12 @@ export class PlaygroundComponent implements OnInit {
         const userid = data.user.id;
         const firstName = data.user.firstName;
         const lastName = data.user.lastName;
-
-        alert('You are ' + firstName + ' ' + lastName + ', your username is ' + username + ' and your user ID is ' + userid + '.')
+        const friends = data.user.friends;
+        const status = data.user.statusMessage;
+        alert('You are ' + firstName + ' ' + lastName + ', your username is ' + username + ' and your user ID is ' + userid + '. Your Friends are ' + JSON.stringify(friends) + ' and your current Status Message is ' + status);
+      })
+      .catch((error) => {
+        console.log(JSON.stringify(error.message));
       })
 
   };
@@ -201,8 +235,10 @@ export class PlaygroundComponent implements OnInit {
       })
         .toPromise()
         .then(({data}: ApolloQueryResult<any>) => {
-          console.log(data);
           alert(JSON.stringify(data));
+        })
+        .catch((error) => {
+          alert(JSON.stringify(error.message));
         })
     }
     else {
@@ -219,6 +255,9 @@ export class PlaygroundComponent implements OnInit {
       .then(({data}: ApolloQueryResult<any>) => {
         alert('Timer active: ' + JSON.stringify(data.toggleTimer));
       })
+      .catch((error) => {
+        alert(JSON.stringify(error.message));
+      })
 
   };
 
@@ -230,8 +269,60 @@ export class PlaygroundComponent implements OnInit {
     })
       .toPromise()
       .then(({data}: ApolloQueryResult<any>) => {
-        console.log(data);
         this.users.refetch();
+      })
+      .catch((error) => {
+        console.log(JSON.stringify(error.message));
+      })
+
+  };
+
+  private changeStatusMessage(username, message) {
+    this.apollo.mutate({
+      mutation: this.mut_changeStatusMessage,
+      variables: {username : username, message: message}
+
+    })
+      .toPromise()
+      .then(({data}: ApolloQueryResult<any>) => {
+        this.users.refetch();
+      })
+      .catch((error) => {
+        console.log(JSON.stringify(error.message));
+      })
+
+  };
+
+  private addAsFriend(username) {
+    this.apollo.mutate({
+      mutation: this.mut_addAsFriend,
+      variables: {username : username}
+
+    })
+      .toPromise()
+      .then(({data}: ApolloQueryResult<any>) => {
+        this.users.refetch();
+      })
+      .catch((error) => {
+        console.log(JSON.stringify(error.message));
+    })
+
+  };
+
+  private viewStatusMessage(username) {
+    this.apollo.query({
+      query: this.query_viewStatusMessage,
+      variables: {
+        username: username
+      },
+      forceFetch: true
+    })
+      .toPromise()
+      .then(({data}: ApolloQueryResult<any>) => {
+        alert(data.user.statusMessage);
+      })
+      .catch((error) => {
+        console.log(JSON.stringify(error.message));
       })
 
   };

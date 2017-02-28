@@ -1,5 +1,4 @@
 import { Injectable} from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
@@ -10,7 +9,7 @@ export class AuthenticationService {
   public token: string;
   private apollo: Apollo;
 
-  constructor(apollo: Apollo, private http : Http) {
+  constructor(apollo: Apollo) {
     // set token if saved in local storage
     var currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = currentUser && currentUser.token;

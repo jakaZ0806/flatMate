@@ -1,7 +1,11 @@
 <div class="col-md-6 col-md-offset-3">
   <div class="alert alert-info">
-    Username: test
-    Password: test
+    <h2>Add new admin user</h2>
+    <input type="text" placeholder="First name" #newfirstName />
+    <input type="text" placeholder="Last name" #newlastName />
+    <input type="text" placeholder="username" #newusername />
+    <input type="password" placeholder="password" #newpassword />
+    <input type="submit" value="Add user" (click)="createAdminUser(newusername.value, newpassword.value, newfirstName.value, newlastName.value)" />
   </div>
   <h2>Login</h2>
   <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
