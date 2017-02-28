@@ -39,7 +39,6 @@ export class AuthenticationService {
     })
       .toPromise()
       .then(({data}: ApolloQueryResult<any>) => {
-        console.log(data);
         if (data.getJWT.success) {
           //Store Token in local Storage
           localStorage.setItem('currentUser', JSON.stringify({ username: username, token: data.getJWT.token }));
