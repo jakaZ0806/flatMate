@@ -27,7 +27,9 @@ export class PlaygroundComponent implements OnInit {
   public username:string;
   public password:string;
   public currentTime:string;
+  public subscribedToTimer:boolean;
   private subscriptionObserver:Subscription;
+  private timerObserver:Subscription;
   private subscriptionQuery:any = gql`
   subscription userChanged{
     userChanged{
@@ -185,7 +187,8 @@ export class PlaygroundComponent implements OnInit {
 
   private subscribeToTimer() {
     // call the "subscribe" method on Apollo Client
-    this.subscriptionObserver = this.apollo.subscribe({
+    this.subscribedToTimer = true;
+    this.timerObserver = this.apollo.subscribe({
       query: this.timerQuery,
       variables: {}
     }).subscribe({
@@ -198,6 +201,11 @@ export class PlaygroundComponent implements OnInit {
         console.error('err', err);
       },
     });
+  }
+
+  private unsubscribeTimer() {
+    this.timerObserver.unsubscribe();
+    this.subscribedToTimer = false;
   }
 
 
@@ -326,5 +334,14 @@ export class PlaygroundComponent implements OnInit {
       })
 
   };
+
+  private toggleSubscription() {
+    if (this.subscribedToTimer) {
+      this.unsubscribeTimer();
+    }
+    else {
+      this.subscribeToTimer();
+    }
+  }
 
 }
