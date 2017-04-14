@@ -1,0 +1,4 @@
+apps:
+  - script : 'start.sh'
+    name   : 'Game AI'
+    watch  : true

@@ -1,0 +1,543 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+				    <h2>Ersetzen von REST durch GraphQL</h2><img width="300" height="200" src="files/rest_graphql.png">
+				    <h4>Bachelor-Thesis Abschlussvortrag</h3>
+                    <h5>Lukas Kugler, 23.03.2017</h4>
+
+				</section>
+				<section>
+				<h4>Übersicht</h4>
+				<ul>
+							<li>Grundlagen zu REST</li>
+							<li>GraphQL: Einführung</li>
+							<li>GraphQL: Syntax</li>
+							<li>Vergleich der Schnittstellen</li>
+							<li>Demo</li>
+				</ul>
+				</section>
+				<section>
+				<h4>Einordnung</h4>
+				<img style="position:relative;top:50%;left:0%;" src="files/client_server.png">
+				<img style="position:absolute;top:25%;left:19%;" src="files/client_server_2.png" class="fragment fade">
+				</section>
+				<section>
+					<h4 style="align-self: top">Grundlagen zu REST</h4>
+					<section>
+						<ul>
+								<li>"Representational State Transfer"</li>
+								<li>Programmierparadigma</li>
+								<li>Existent seit 2000, erst später intensiv eingesetzt</li>
+						</ul>
+					</section>
+					<section>
+						<h6> Eigenschaften von REST </h6>
+						<ul>
+								<li>Ziel: Vereinheitlichung der Kommunikation zwischen Webservices</li>
+								<li>Einheitliche Schnittstelle</li>
+								<li>Ressourcenzentriert</li>
+								<li>HTTP-Methoden</li>
+						</ul>
+					</section>
+					<section>
+						<h6>HTTP-Methoden</h6>
+						<ul>
+								<li><b>GET:</b> lesen</li>
+								<li><b>PUT:</b> erstellen</li>
+								<li><b>POST:</b> aktualisieren</li>
+								<li><b>DELETE:</b> löschen</li>
+						</ul>
+					</section>
+					<section>
+					<h6>Wie sieht eine REST-Schnittstelle aus?</h6>
+					<div class="fragment fade-left">
+						Benutzer abfragen:			
+						 <blockquote>
+							GET /api/users/1
+						</blockquote>
+						
+					</div>
+					<div class="fragment fade-left">
+						Bestellungen eines Benutzers abfragen:		
+						 <blockquote>
+							GET /api/users/1/orders
+						</blockquote>
+					</div>
+					</section>
+					<section>
+						<h6>Overhead</h6>
+						<ul>
+								<li class="fragment fade-left">Zurückgeben aller Artikeldetails mit der User-Anfrage?</li>
+								<li class="fragment fade-left">Stellen einer zusätzlichen Anfrage?</li>
+
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h4 style="align-self: top">GraphQL: Einführung</h4>
+					<img width="70" height="70" style="position:absolute;top:0;left:0;" src="files/GraphQL_Logo.svg">
+					<section>
+						<ul>
+								<li>Abfragesprache ("Query Language")</li>
+								<li>Entwickelt von Facebook</li>
+								<li>Verließ "Technical Preview" im September 2016</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+				<h4 style="align-self: top">GraphQL: Einführung</h4>
+				<img width="70" height="70" style="position:absolute;top:0;left:0;" src="files/GraphQL_Logo.svg">
+				<h6>Design-Prinzipien</h6>
+					<section>
+						<blockquote>
+							Hierarchisch
+						</blockquote>
+						<small>Eine GraphQL-Anfrage an sich ist eine hierarchische Anordnung von Feldern. Die Anfrage hat dieselbe Form, wie die Daten,	die sie zurückgibt.</small>
+					</section>
+					<section>
+						<blockquote>
+							Produktorientiert
+						</blockquote>
+						<small>GraphQL ist speziell für die Anforderungen von Views und für Frontend-Entwickler gedacht.</small>
+					</section>
+					<section>
+						<blockquote>
+							Client-spezifizierte Anfragen
+						</blockquote>
+						<small>Die
+						 Spezifikation für Anfragen ist sehr granular im Client definiert, nicht im Server.</small>
+					</section>
+					<section>
+						<blockquote>
+							Abwärtskompatibel
+						</blockquote>
+						<small>Durch die Clientspezifizierten Anfragen ist eine Abwärtskompatibilität der API einfacher zu realisieren.</small>
+					</section>
+					<section>
+						<blockquote>
+							Strukturierter, beliebiger Code
+						</blockquote>
+						<small>GraphQL stellt dem Server eine Struktur zur Verfügung und öffnet einzelne Felder, die mit beliebigem Code hinterlegt sind.</small>
+					</section>
+					<section>
+						<blockquote>
+							Protokoll der Applikationsschicht
+						</blockquote>
+						<small>GraphQL ist ein Protokoll der Applikationsschicht und benötigt kein bestimmtes Transportprotokoll.</small>
+					</section>
+					<section>
+						<blockquote>
+							Streng Typisiert
+						</blockquote>
+						<small>Anfragen können vor ihrer Ausführung auf syntaktische und und typbezogene Korrektheit überprüft werden.</small>
+					</section>
+					<section>
+						<blockquote>
+							Introspektiv
+						</blockquote>
+						<small>Clients und Tools können das Typsystem mit GraphQL-Syntax selbst abfragen.</small>
+					</section>
+					</section>
+					<section>
+						<h6>GraphQL: Umsetzung</h6>
+							<ul>
+								<li>Gesamte Schnittstelle über einen Endpunkt erreichbar</li>
+								<li>Server öffnet bestimmte Einstiegspunkte</li>
+								<li>GraphQL-String als Payload in der Anfrage</li>
+								<li>String als Antwort (JSON)</li>
+								<li>Alle Ressourcen und Anfragen streng typisiert</li>
+						</ul>
+					</section>
+				</section>
+					<section>
+					<h4 style="align-self: top">GraphQL: Syntax</h4>
+					<img width="70" height="70" style="position:absolute;top:0;left:0;" src="files/GraphQL_Logo.svg">
+					<section>
+						<h6>Das Schema & Resolver</h6>
+						<ul>
+								<li>Legt fest, welche Anfragen an den Server gestellt werden können</li>
+								<li>Legt die Form der Daten fest</li>
+								<li>Legt fest, was der Server an den Client als Antwort zurückgibt</li>
+						</ul>
+					</section>
+					<section>
+						<h6>Das Schema: Typen</h6>
+						<pre><code data-trim>
+type User {
+  firstName: String!
+  lastName: String!
+  orders: [Order]
+}
+						</code></pre>
+						<div class="fragment fade-left">
+						<pre><code data-trim>
+type Query {
+  user(id: id!): User
+}
+						</code></pre>
+						</div>
+					</section>
+					<section>
+						Resolver
+						<ul>
+								<li>Werden immer aufgerufen, wenn ein Typ abgefragt wird</li>
+								<li>Beliebiger Code</li>
+								<li>Für Skalare üblicherweise Zugriff auf Datenbank</li>
+						</ul>
+					</section>
+					<section>
+						Resolver-Funktion für user-Anfrage
+						<pre><code data-trim>
+user: async (obj, args, context) => {
+  return await Users.findById(args.id);
+}
+						</code></pre>
+					</section>
+					<section>
+						Resolver für bestimmten Typ
+						<pre><code data-trim>
+User: {
+        friends: async (user) => {
+            return await Users.getUsersById(user.friends);
+        }
+    }
+						</code></pre>
+					</section>
+				
+					<section>
+						Eine einfache Anfrage...
+							<pre><code data-trim>
+						          user {
+						            firstName
+						          }
+							</code></pre>
+						<div class="fragment fade-left">
+						... und die Antwort:
+						<pre><code data-trim>
+							{
+							"data": {
+							  "user": {
+							    "firstName": "Lukas"
+							    }
+							  }
+							}
+							</code></pre>
+						</div>
+					</section>
+										<section>
+						Mit Subselektionen:
+						<pre><code data-trim>
+						user(id: "1") {
+						  firstName,
+						  lastName,
+						  orders(year: "2016") {
+						    sum
+						    date
+						    status
+						    articles {
+						      name
+						      price
+						      category
+						    }
+						  }
+						}
+						</code></pre>
+					</section>
+					<section>
+						Antwort:
+						<pre><code data-trim style="font-size: small; line-height: 1">
+
+    "user": {
+      "firstName": "Lukas",
+      "lastName": "Kugler",
+      "orders": [
+        {
+          "sum": "3",
+          "date": "07-01-2016"
+          "status" "versandt"
+          "articles": [
+            {"name" : "Bleistift",
+            "price" : "2",
+            "category" : "Schreibwaren"
+            },
+            {"name" : "Block",
+            "price" : "1",
+            "category" : "Schreibwaren"
+            }
+          ]
+        },
+        {
+          "sum": "15",
+          "date": "07-01-2016"
+          "status" "in Bearbeitung"
+          "articles": [
+            {"name" : "USB-Stick 32GB",
+            "price" : "10",
+            "category" : "Elektronik"
+            },
+            {"name" : "AAA-Batterien 6er Pack",
+            "price" : "5",
+            "category" : "Elektronik"
+            }
+          ]
+        },
+      ]
+    }
+						</code></pre>
+					</section>
+					<section>
+						Mit Variable:
+						<pre><code data-trim>
+						query userById($id: Int) {
+						  user(id: $id) {
+						    firstName
+						    lastName
+						  }
+						}
+						</code></pre>
+						<div class="fragment fade-left">
+						Antwort:
+						<pre><code data-trim>
+								{
+								  "data": {
+								    "user": {
+								      "firstName": "Lukas",
+								      "lastName": "Kugler"
+								    }
+								  }
+								}
+						</code></pre>
+						</div>
+					</section>
+					<section>
+						Daten anlegen:
+						<pre><code data-trim>
+mutation addNewUser($firstName: String, $lastName: String!) {
+    addUser(firstName: $firstName, lastName: $lastName) {
+        firstName
+        lastName
+    } 	
+}
+						</code></pre>
+
+						<pre><code data-trim>
+{
+  "firstName": "Max",
+  "lastName": "Mustermann"
+}
+						</code></pre>
+					</section>
+				</section>
+				<section>
+				<h4 style="align-self: top">Vergleich</h4>
+					<section>
+					<h6> Typisches Benutzer-Objekt</h6>
+						<small><ul>
+								<li>id (String)</li>
+								<li>username (String)</li>
+								<li>firstName (String)</li>
+								<li>lastName (String)</li>
+								<li>statusMessage (String)</li>
+								<li>password (String)</li>
+								<li>friends ([User])</li>
+								<li>admin (Boolean)</li>
+						</ul></small>
+					</section>
+					<section>
+					<small><table style="width:100%">
+						<tr>
+								<td>Auslesen aller Benutzer</td>
+								<td>GET /api/users</td>
+						</tr>
+						<tr>
+								<td>Auslesen eines Benutzers anhand seiner ID</td>
+								<td>GET /api/users/ID</td>
+						</tr>
+						<tr>
+								<td>Hinzufügen eines Benutzers</td>
+								<td>POST /api/users</td>
+						</tr>
+						<tr>
+								<td>Löschen eines Benutzers</td>
+								<td>DELETE /api/users/ID</td>
+						</tr>
+						<tr>
+								<td>Ändern des Passworts</td>
+								<td>POST /api/users/ID/password</td>
+						</tr>
+						<tr>
+								<td>Ändern der Statusnachricht</td>
+								<td>POST /api/users/ID/statusMessage</td>
+						</tr>
+						<tr>
+								<td>Einen Freund hinzufügen</td>
+								<td>POST /api/users/ID/friends</td>
+
+						</tr>
+						</table></small>
+					</section>
+					<section>
+						<small><table style="width:100%">
+						<tr>
+								<td>GET /api/users</td>
+								<td>Eine Query, welche ein Array aller User-Typen zurückgibt</td>
+						</tr>
+						<tr>
+								<td>GET /api/users/ID</td>
+								<td>Eine Query, welche ein User-Objekt anhand seiner ID zurückgibt</td>
+						</tr>
+						<tr>
+								<td>POST /api/users</td>
+								<td>Eine Mutation, welche ein User-Objekt erzeugt</td>
+						</tr>
+						<tr>
+								<td>DELETE /api/users/ID</td>
+								<td>Eine Mutation, welche ein User-Objekt anhand seiner ID löscht</td>
+						</tr>
+						<tr>
+								<td>POST /api/users/ID/password</td>
+								<td>Eine Mutation, welche das Feld Password eines Users ändert</td>
+						</tr>
+						<tr>
+								<td>POST /api/users/ID/statusMessage</td>
+								<td>Eine Mutation, welche das Feld statusMessage eines Users ändert</td>
+						</tr>
+						<tr>
+								<td>POST /api/users/ID/friends</td>
+								<td>Eine Mutation, welche dem Feld friends eines Users einen Eintrag hinzufügt</td>
+
+						</tr>
+						</table></small>
+					</section>
+					<section>
+					<h6>Authorisierung (Express)</h6>
+					<ul>
+								<li>Über Middleware mit JSON Web Tokens</li>
+								<li>Endpunkt offen, geschützt wird in den Resolvern</li>
+								<li>Query- und Field-Level Auth möglich dank Custom Resolvern</li>
+								<li>Verschiedene Rechte-Ebenen möglich (Admin, User)</li>
+								<li>Login: JWT kann über GraphQL abgefragt werden</li>
+
+					</ul>
+					</section>
+					<section>
+					<h6>Datenlast</h6>
+					<pre><code data-trim>
+user(id: ID) {
+  firstName,
+  lastName,
+  statusMessage,
+  friends {
+   	firstName
+   	lastName
+  }
+}						</code></pre>
+					</section>
+					<section>
+						<h6>Datenlast</h6>
+						<small><table width=100%>
+						<tr>
+							<th>REST</th>
+							<th>GraphQL</th>
+						</tr>
+						<tr>
+							<td>
+								Anfrage mit User-ID<br>
+								5 Strings<br>
+								1 Bool<br>
+								Array aus IDs<br>
+								Pro Freund:<br>
+								Anfrage mit ID<br>
+								5 Strings<br>
+								1 Bool<br>
+								Array aus IDs
+							</td>
+							<td>Anfrage mit GraphQL-Query-String<br>
+							3 Strings<br><br><br>
+							Pro Freund:<br>
+							2 Strings
+							</td>
+						</tr>
+						</table></small>
+
+					</section>
+					<section>
+					API-Versionierung
+					<ul>
+								<li>Versionierung üblicherweise, da Client Daten erhält mit denen er nichts anfangen kann</li>
+								<li>In GraphQL merkt der Client nichts von neuen Feldern</li>
+								<li>Best Practice: Versionslose API</li>
+								<li>Felder können @deprecated markiert werden</li>
+								<li>Änderungen in der API können in hoher Frequenz vorgenommen werden</li>
+
+					</ul>
+					</section>
+					<section>
+						<h6>Subscriptions</h6>
+						<ul>
+								<li>Push von Live-Daten vom Server an Clients</li>
+								<li>PubSub-System</li>
+								<li>Client sendet Anfrage mit Schlüsselwort</li>
+								<li>Server reagiert auf Events (Queue, Timer, Änderungen)</li>
+								<li>GraphQL-Syntax mit allen Vorteilen (Selektion)</li>
+
+					</ul>
+					</section>
+					<section>
+						<h6>Für Entwickler</h6>
+						<ul>
+							<li>Einfaches Mocking</li>
+							<li>GraphiQL</li>
+					</section>
+				</section>
+				<section>
+					Fragen?
+					<div class="fragment fade-left">Demo!</div>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
